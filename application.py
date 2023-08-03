@@ -7,7 +7,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 
 
-app = Flask(__name__)
+application = Flask(__name__)
+app = application
 app.secret_key = os.getenv("SECRET_KEY")
 
 client = MongoClient(os.getenv("MONGODB_URI"))
@@ -111,4 +112,4 @@ def search_results():
     return render_template("results.html", headings=headings, results=results)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8000)
