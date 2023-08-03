@@ -1,8 +1,9 @@
-flask
+flask==1.1.2
 pymongo[srv]
-flask_cors
-requests
-bs4
+flask_cors==3.0.9
+requests==2.24.0
+urllib3==1.25.10 
+bs4==0.0.1
 pandas
 python-dotenv
-gunicorn
+gunicorn==20.0.4
