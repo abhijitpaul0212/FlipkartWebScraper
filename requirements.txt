@@ -5,3 +5,4 @@ requests
 bs4
 pandas
 python-dotenv
+gunicorn
