@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <a href="{{ url_for('home') }}">HOME</a> 
+
+    <div class="search">
+        <form class="form-container" method="POST">
+            <h2 class="text-white form-container--title">Welcome to Web Scrapping</h2>
+                    <br/>
+                    <br/>
+            <div class="form-inline">
+                <input type="text" class="form-control mb-2 mr-sm-2" name="search" id="search" aria-describedby="searchHelp" placeholder="Enter text to search">
+                <small id="searchHelp" class="form-text text-muted">For now it works for Flipkart Website only</small>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2" onclick="loading();">Search</button>
+        </form>
+    </div>
+    <div>
+        {% for message in get_flashed_messages() %}
+            <div class="alert text-white">
+            <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="loader"></div>
+    
+{% endblock %}
