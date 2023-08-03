@@ -5,4 +5,4 @@ requests
 bs4
 pandas
 python-dotenv
-gnuicorn
+gunicorn
