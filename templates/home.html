@@ -8,8 +8,18 @@
                     <br/>
                     <br/>
             <div class="form-inline">
-                <input type="text" class="form-control mb-2 mr-sm-2" name="search" id="search" aria-describedby="searchHelp" placeholder="Enter text to search">
-                <small id="searchHelp" class="form-text text-muted">For now it works for Flipkart Website only</small>
+
+                <label for="search">Search: </label>
+                <input type="text" class="form-control mb-2 mr-sm-2" name="search" id="search" aria-describedby="searchHelp" placeholder="Enter text">
+
+                <label for="num_pages">Select number of pages: </label>
+                <select name="num_pages" id="num_pages">
+                    <option value="1" selected>1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary mb-2" onclick="loading();">Search</button>
         </form>

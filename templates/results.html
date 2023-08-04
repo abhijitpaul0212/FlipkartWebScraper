@@ -20,7 +20,11 @@
                                         <td class="table__cell">
                                             <tr>
                                             {% for itm in item %}
-                                                <td><li class="list_cells"> {{ itm | capitalize }}</li></td>
+                                                {% if itm !="NA" %}
+                                                    <td><li class="list_cells"> {{ itm | capitalize }}</li></td>
+                                                {% else %}
+                                                    <td><li class="list_cells"> {{ itm }}</li></td>
+                                                {% endif %}
                                             {% endfor %}
                                             </tr>
                                         </td>

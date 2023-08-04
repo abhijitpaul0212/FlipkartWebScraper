@@ -24,6 +24,9 @@
 
 .table__cell{
     padding: 1px;
+    align-items: center;
+    margin-left: auto;
+    margin-left: auto;
 }
 
 .search{
