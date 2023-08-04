@@ -15,11 +15,23 @@
                     {% if cell.__class__.__name__ == "list" %}
                         <td class="table__cell"> 
                             {% for item in cell %}
-                                <li> {{ item }}</li>
+                                <table> 
+                                    {% if item.__class__.__name__ == "list" %}
+                                        <td class="table__cell">
+                                            <tr>
+                                            {% for itm in item %}
+                                                <td><li class="list_cells"> {{ itm | capitalize }}</li></td>
+                                            {% endfor %}
+                                            </tr>
+                                        </td>
+                                    {% else %}
+                                        <td class="table__cell">{{ item | capitalize}}</td>
+                                    {% endif %}
+                                </table>
                             {% endfor %}
                         </td>
                     {% else %}
-                        <td class="table__cell">{{ cell }}</td>
+                        <td class="table__cell">{{ cell | capitalize}}</td>
                     {% endif %}
                 {% endfor %}
             </tr>

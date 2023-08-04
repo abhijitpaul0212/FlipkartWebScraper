@@ -22,12 +22,13 @@ class WebScrape:
         self.ratings = []
         self.prices = []
         self.specifications = []
-        self.reviews = []
+        self.reviews = []        
 
     def store_in_df(self):
+        print(len(self.products), len(self.ratings), len(self.prices), len(self.reviews), len(self.specifications))
         if all([len(self.products), len(self.ratings), len(self.prices), len(self.reviews), len(self.specifications)]):
-            df = pd.DataFrame({'Product Name': self.products, 'Customer Ratings': self.ratings, 'Price': self.prices, 'Specification': self.specifications, 'Reviews': self.reviews})
-            print(df.head(10))
+            df = pd.DataFrame({'Product Name': self.products, 'Overall Ratings': self.ratings, 'Price': self.prices, 'Specification': self.specifications, 'Reviews': self.reviews})
+            # print(df.head(10))
             return df
         else:
             print("Cannot store data since one/all column(s) has zero values scrapped")
@@ -49,7 +50,7 @@ class WebScrape:
         base_url = "https://www.flipkart.com"
         query_url = f"/search?q={self.query}&as=on&as-show=on&otracker=AS_Query_TrendingAutoSuggest_8_0_na_na_na&otracker1=AS_Query_TrendingAutoSuggest_8_0_na_na_na&as-pos=8&as-type=TRENDING&suggestionId=tv&requestId=9c9fa553-b7e5-454b-a65b-bbb7a9c74a29&page=1"
         final_url = base_url + query_url
-        for _ in range(2):
+        for _ in range(10):
             response = requests.get(final_url)
             if response.status_code != 200:
                 break
@@ -77,12 +78,24 @@ class WebScrape:
                 prod_page = requests.get(final_link)
                 prod_soup = bs(prod_page.content, "html.parser")
                 all_review_rows = prod_soup.find_all(name='div', attrs={'class': 'col _2wzgFH K0kLPL'})
-                prod_review = []
+                
+                review_data= []
                 if all_review_rows != []:
                     for row in all_review_rows:
-                        review = row.find('p', attrs={'class': '_2-N8zT'})
-                        prod_review.extend([review.text if review is not None else 'NA'])
-                    self.reviews.append(prod_review)
+                        prod_rating = row.find('div', attrs={'class': '_3LWZlK _1BLPMq'})
+                        prod_rating = prod_rating.text if prod_rating is not None else 'NA'
+
+                        prod_reviewer = row.find('p', attrs={'class': '_2sc7ZR _2V5EHH'})
+                        prod_reviewer = prod_reviewer.text if prod_reviewer is not None else 'NA'
+
+                        prod_review_title = row.find('p', attrs={'class': '_2-N8zT'})
+                        prod_review_title = prod_review_title.text if prod_review_title is not None else 'NA'
+
+                        prod_review = row.find('div', attrs={'class': 't-ZTKy'})
+                        prod_review = prod_review.text.replace("READ MORE", "") if prod_review is not None else 'NA'
+                        
+                        review_data.append((prod_reviewer, prod_rating, prod_review_title, prod_review))
+                    self.reviews.append(review_data)
                 else:
                     self.reviews.append('NA')
                 
@@ -105,6 +118,7 @@ def search_results():
     headings = ('Product Name', 'Customer Ratings', 'Price', 'Specification', 'Reviews')
     results = []
     for result in flipkart_coll.find({}):
+        print(result.get(headings[4]))
         results.append((result.get(headings[0]), result.get(headings[1]), result.get(headings[2]), result.get(headings[3]), result.get(headings[4])))
     if results == []:
         flash("No data found... try again!")
