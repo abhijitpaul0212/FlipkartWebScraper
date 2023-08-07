@@ -18,16 +18,23 @@
     margin-block: inherit;
 }
 
+.table__row__cascade:nth-child(odd){
+    background-color: #c6d7db;
+    margin-block: inherit;
+}
+
 .table__header{
     text-align: left;
 }
 
 .table__cell{
     padding: 1px;
+    text-align: center;
     align-items: center;
     margin-left: auto;
     margin-left: auto;
 }
+
 
 .search{
     margin-left: auto;

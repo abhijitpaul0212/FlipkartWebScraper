@@ -7,3 +7,4 @@ bs4==0.0.1
 pandas
 python-dotenv
 gunicorn==20.0.4
+bson

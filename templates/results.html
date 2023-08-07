@@ -5,38 +5,37 @@
     <div>
         <table class="table">
             <tr class="table__header">
-                {% for heading in headings %}
+                {% for heading in product_headings %}
                     <th class="table__cell">{{ heading }}</th>
                 {% endfor %}
+                <th class="table__cell"> Customer Review </th>
+
             </tr>
             {% for row in results %}
             <tr class="table__row">
-                {% for cell in row %}
-                    {% if cell.__class__.__name__ == "list" %}
-                        <td class="table__cell"> 
-                            {% for item in cell %}
-                                <table> 
-                                    {% if item.__class__.__name__ == "list" %}
-                                        <td class="table__cell">
-                                            <tr>
-                                            {% for itm in item %}
-                                                {% if itm !="NA" %}
-                                                    <td><li class="list_cells"> {{ itm | capitalize }}</li></td>
-                                                {% else %}
-                                                    <td><li class="list_cells"> {{ itm }}</li></td>
-                                                {% endif %}
-                                            {% endfor %}
-                                            </tr>
+                {% for key in row.keys() %}
+                    <td class="table__cell"> 
+                        {% if key == "Review Section" %}
+                            <table class="table">
+                                <tr class="table__header">
+                                    {% for heading in review_headings %}
+                                        <th class="table__cell">{{ heading }}</th>
+                                    {% endfor %}
+                                </tr>
+                                {% for k_row in row[key] %}
+                                <tr class="table__row__cascade">
+                                    {% for k_key in k_row.keys() %}
+                                        <td class="table__cell"> 
+                                            {{ k_row[k_key] | capitalize }}
                                         </td>
-                                    {% else %}
-                                        <td class="table__cell">{{ item | capitalize}}</td>
-                                    {% endif %}
-                                </table>
-                            {% endfor %}
-                        </td>
-                    {% else %}
-                        <td class="table__cell">{{ cell | capitalize}}</td>
-                    {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            {{ row[key] }}
+                        {% endif %}
+                    </td>
                 {% endfor %}
             </tr>
             {% endfor %}
