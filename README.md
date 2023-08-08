@@ -1,4 +1,4 @@
-## Flipkart Web Scrapping
+## Flipkart Web Scraping
 
 This is a mini assignment project created a part of learning WebScrapping using
 *  BeautifulSoup
