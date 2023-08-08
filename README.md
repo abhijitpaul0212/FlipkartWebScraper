@@ -1,6 +1,6 @@
 ## Flipkart Web Scraping
 
-This is a mini assignment project created a part of learning WebScrapping using
+This is a mini assignment project created as a part of learning Web Scraping using
 *  BeautifulSoup
 *  Requests API
 *  Flask (Server)
