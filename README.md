@@ -1,6 +1,7 @@
 ## Flipkart Web Scraping
 
-This is a mini assignment project created as a part of learning Web Scraping using
+This is a mini assignment project created as a part of learning Web Scraping where the requirement is to extract information
+from Flipkart Website such `Product Name`, `Price`, `Overall Rating`, foloower by detailed `customer reviews` and `ratings` using
 *  BeautifulSoup
 *  Requests API
 *  Flask (Server)
