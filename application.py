@@ -1,4 +1,8 @@
-# WebScrapper application
+"""
+WebScrapper application
+Created by: Abhijit Paul
+Purpose: It is a mini project implemented while learning about Web Scraping
+"""
 import os
 import time
 import requests
@@ -15,27 +19,35 @@ import logging
 logging.basicConfig(filename="scrapper.log" , level=logging.INFO)
 
 
+# Create Flask instance
 application = Flask(__name__)
 app = application
 app.secret_key = os.getenv("SECRET_KEY")
 
+# Create MongoDB instance
 client = MongoClient(os.getenv("MONGODB_URI"))
 app.db = client['web_scrape']
 
 python_opts = CodecOptions(uuid_representation=UuidRepresentation.PYTHON_LEGACY)
+
+# Create two collections (one for products and another for detailed customer reviews)
 product_coll = app.db.get_collection('product_data', codec_options=python_opts)
 review_coll = app.db.get_collection('review_data', codec_options=python_opts)
 
 class WebScrape:
+    """
+    This class contains the core functions for Web Scraping
+    """
     def __init__(self, query) -> None:
-        # Product details
+        
+        # Store product details
         self.pids = []
         self.products = []
         self.overall_ratings = []
         self.prices = []
         self.specifications = []
         
-        # Review details
+        # Store customer review details
         self.review_pids = []
         self.customer_names = []
         self.customer_ratings = []
@@ -45,9 +57,14 @@ class WebScrape:
         self.session = requests.Session()
         self.query = query
         self.base_url = "https://www.flipkart.com"
+
+        # Query url chosen for this project
         self.query_url = f"/search?q={self.query}&as=on&as-show=on&otracker=AS_Query_TrendingAutoSuggest_8_0_na_na_na&otracker1=AS_Query_TrendingAutoSuggest_8_0_na_na_na&as-pos=8&as-type=TRENDING&suggestionId=tv&requestId=9c9fa553-b7e5-454b-a65b-bbb7a9c74a29&page=1"
 
     def convert_to_df(self, frame_name="product"):
+        """
+        This method converts the linear datas into a DataFrame
+        """
         if frame_name == "product":
             df = pd.DataFrame({'P_ID': self.pids, 'Product Name': self.products, 'Overall Rating': self.overall_ratings, 'Price': self.prices})
             return df
@@ -57,9 +74,13 @@ class WebScrape:
         
     
     def store_in_db(self, collection_name, dataframe=None):
+        """
+        This method stores the dataframe into database
+        """
+        
         start_time = time.perf_counter()
         
-        # Deleting old entries for managing DB
+        # Cleanup old entries for managing DB space
         response = collection_name.delete_many({}) 
         print(f"{response.deleted_count} documents deleted as a part of cleanup activity")
         
@@ -75,7 +96,10 @@ class WebScrape:
         else:
             logging.error("Empty dataframe cannot be stored in Database")
     
-    def get_products(self, url: str, master_page: bool=True):
+    def _get_products(self, url: str, master_page: bool=True):
+        """
+        This is a protected method designed to fetch contents via requests module and parse the html content using beatifulsoup
+        """
         response = self.session.get(url)
         soup = bs(response.content, "html.parser")
         if master_page:
@@ -84,6 +108,9 @@ class WebScrape:
             return soup.find_all(name='div', attrs={'class': 'col _2wzgFH K0kLPL'}), soup
     
     def fetch_prod_reviews(self, prod_url: str):
+        """
+        This method extracts the product details and reviews from the HTML DOM 
+        """
         pid = uuid.uuid4()
         self.pids.append(pid)
             
@@ -101,7 +128,7 @@ class WebScrape:
         prod_link = prod_url['href']
         final_link = self.base_url + prod_link
         final_link = final_link.replace("/p/", "/product-reviews/")
-        all_rows, _ = self.get_products(url=final_link, master_page=False)
+        all_rows, _ = self._get_products(url=final_link, master_page=False)
         
         for row in all_rows:
             prod_reviewer = row.find('p', attrs={'class': '_2sc7ZR _2V5EHH'})
@@ -120,11 +147,14 @@ class WebScrape:
             self.review_pids.append(list(pid for _ in range(len(self.customer_names))))
             
     def web_scrape(self, number_of_pages: int):
+        """
+        This is the method to interate through the list of web pages and scrape the data
+        """
         start_time = time.perf_counter()
                 
         final_url = self.base_url + self.query_url
         for _ in range(number_of_pages):
-            all_rows, soup = self.get_products(final_url)
+            all_rows, soup = self._get_products(final_url)
             
             # Multi-Threading
             with ThreadPoolExecutor(max_workers=100) as executor:
