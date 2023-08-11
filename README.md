@@ -31,3 +31,9 @@ With Multi-Threaded, it takes around 2.5+ secs only (Further optimization can be
 
 * Deployed Project URL:- https://lnkd.in/dtsgWPQN
 * GitHub Link:- https://github.com/abhijitpaul0212/FlipkartWebScraper
+
+### Area of improvements
+1. Optimise the search response rate.
+2. Design the framework to be a modular one (using Blueprints)
+3. Expand the host to scrap from with user provided data. (e.g. Amazon, Flipkart, Myntra, etc)
+4. Will keep adding up ...
