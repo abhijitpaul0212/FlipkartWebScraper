@@ -9,7 +9,7 @@ from Flipkart Website such `Product Name`, `Price`, `Overall Rating`, foloower b
 along with 
 * HTML (Frontend)
 * CSS (Frontend)
-* MongoDB (Data Storage) | Applied Aggregation Pipeline
+* MongoDB (Data Storage) | Applied NoSQL Aggregation Pipelines
 
 ### Optimization
 Using `concurrent.futures` module `multithreading` is implemented, increasing search rate of web contents along with minimising the time consumption for IO-bound tasks such logs and databases leading to a better performance of the #WebScraper application.
